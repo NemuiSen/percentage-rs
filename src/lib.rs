@@ -12,7 +12,6 @@ use std::{
 	},
 };
 
-
 /// Transform any number into [`Percentage`]
 pub trait Percent {
 	/// Transform any number into [`Percentage`]
