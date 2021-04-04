@@ -1,3 +1,6 @@
+//! # Tests
+//! `test` tests
+
 use crate::*;
 
 #[test]

@@ -1,3 +1,8 @@
+//! # percentage-rs
+//! `percentage-rs` Get the percentage of any number
+
+#[cfg(test)] mod tests;
+
 use std::{
 	fmt,
 	ops::{
@@ -7,7 +12,6 @@ use std::{
 	},
 };
 
-#[cfg(test)] mod tests;
 
 /// Transform any number into [`Percentage`]
 pub trait Percent {
