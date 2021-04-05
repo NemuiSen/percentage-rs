@@ -3,6 +3,8 @@ name = "percentage-rs"
 version = "0.1.0"
 authors = ["nemui_sen <40149702+NemuiSen@users.noreply.github.com>"]
 edition = "2018"
+description = "Get the percentage of any number"
+license = "MIT"
 keywords = ["percent", "percentage"]
 repository = "https://github.com/NemuiSen/percentage-rs"
 
