@@ -3,14 +3,7 @@
 
 #[cfg(test)] mod tests;
 
-use std::{
-	fmt,
-	ops::{
-		Add,
-		Mul,
-		MulAssign
-	},
-};
+use std::{fmt, ops::{Add, AddAssign, Mul, MulAssign}};
 
 /// Transform any number into [`Percentage`]
 pub trait Percent {
@@ -71,7 +64,7 @@ percent_impl!{
 /// let res_num = 1234*50.percent(); // 50% of 1234
 /// println!("{}", res_num); // the result is "617"
 /// ```
-#[derive(Clone, Copy)]
+#[derive(Clone, PartialEq)]
 pub struct Percentage(pub f64);
 
 impl Percentage {
@@ -102,20 +95,26 @@ impl Add for Percentage {
 	}
 }
 
+impl AddAssign for Percentage {
+	fn add_assign(&mut self, rhs: Percentage) {
+		*self = self.clone() + rhs;
+	}
+}
+
 macro_rules! ops_percentage_impl {
 	($($type: ty)*) => {
 		$(
-			impl Mul<Percentage> for $type {
-				type Output = f64;
-				fn mul(self, rhs: Percentage) -> Self::Output {
-					self as f64 * rhs.get()
-				}
-			}
-
 			impl Add<Percentage> for $type {
 				type Output = Percentage;
 				fn add(self, rhs: Percentage) -> Self::Output {
 					((rhs.get() + self as f64)*100.0).percent()
+				}
+			}
+
+			impl Mul<Percentage> for $type {
+				type Output = f64;
+				fn mul(self, rhs: Percentage) -> Self::Output {
+					self as f64 * rhs.get()
 				}
 			}
 
