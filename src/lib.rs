@@ -64,7 +64,7 @@ percent_impl!{
 /// let res_num = 1234*50.percent(); // 50% of 1234
 /// println!("{}", res_num); // the result is "617"
 /// ```
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub struct Percentage(pub f64);
 
 impl Percentage {
