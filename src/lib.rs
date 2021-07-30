@@ -5,6 +5,8 @@
 
 use std::{fmt, ops::{Add, AddAssign, Mul, MulAssign}};
 
+use num_traits::NumCast;
+
 /// Transform any number into [`Percentage`]
 pub trait Percent {
 	/// Transform any number into [`Percentage`]
@@ -24,7 +26,7 @@ macro_rules! percent_impl {
 		$(
 			impl Percent for $ty {
 				fn percent(self) -> Percentage {
-					Percentage(self as f64)
+					Percentage::new(self)
 				}
 			}
 		)*
@@ -44,16 +46,15 @@ percent_impl!{
 /// ```
 /// use percentage_rs::Percentage;
 /// 
-/// let percent = Percentage(50.0);
-/// println!("{}", percent); // the result is "50%"
+/// let p = Percentage::new(50);
+/// assert!("50%" == format!("{}", p)); // the result is "50%"
 /// ```
 /// 
 /// ### Create a [`Percentage`] with the trait [`Percent`]
 /// ```
 /// use percentage_rs::Percent;
 /// 
-/// let percent = 50.percent();
-/// println!("{}", percent); // the result is "50%"
+/// assert!(format!("{}", 50.percent()) == "50%"); // the result is "50%"
 /// ```
 /// 
 /// ### Calculate the percentage
@@ -61,30 +62,22 @@ percent_impl!{
 /// ```
 /// use percentage_rs::Percent;
 /// 
-/// let res_num = 1234*50.percent(); // 50% of 1234
-/// println!("{}", res_num); // the result is "617"
+/// let p = 1234*50.percent(); // 50% of 1234
+/// assert!(p == 617.0 as f32); // the result is "617"
 /// ```
-#[derive(Clone, Copy, PartialEq, Debug)]
-pub struct Percentage(pub f64);
+#[derive(Default, Clone, Copy, PartialEq, Debug)]
+pub struct Percentage(f32);
 
 impl Percentage {
-	/// This function returns the value of the percentage divided by 100, this is because the percentage formula is `x*(p/100)` where:
-	/// * `x` is the value from you want extract the percentage
-	/// * `p` is the percentage
-	pub fn get(&self) -> f64 {
-		self.0 / 100.0
-	}
-}
-
-impl Default for Percentage {
-	fn default() -> Self {
-		Self(0.0)
+	/// Create a percentage with the given value into percen
+	pub fn new<T: NumCast>(value: T) -> Percentage {
+		Self(value.to_f32().unwrap() / 100.0)
 	}
 }
 
 impl fmt::Display for Percentage {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		write!(f, "{}%", self.0)
+		write!(f, "{}%", self.0*100.0)
 	}
 }
 
@@ -97,7 +90,26 @@ impl Add for Percentage {
 
 impl AddAssign for Percentage {
 	fn add_assign(&mut self, rhs: Percentage) {
-		*self = self.clone() + rhs;
+		*self = *self + rhs;
+	}
+}
+
+impl<T: NumCast> AddAssign<T> for Percentage {
+	fn add_assign(&mut self, rhs: T) {
+		*self = Self(self.0 + rhs.to_f32().unwrap());
+	}
+}
+
+impl Mul for Percentage {
+	type Output = Self;
+	fn mul(self, rhs: Self) -> Self::Output {
+		Self(rhs.0*self.0)
+	}
+}
+
+impl MulAssign for Percentage {
+	fn mul_assign(&mut self, rhs: Self) {
+		*self = *self * rhs;
 	}
 }
 
@@ -107,14 +119,14 @@ macro_rules! ops_percentage_impl {
 			impl Add<Percentage> for $type {
 				type Output = Percentage;
 				fn add(self, rhs: Percentage) -> Self::Output {
-					((rhs.get() + self as f64)*100.0).percent()
+					Percentage(rhs.0 + self as f32)
 				}
 			}
 
 			impl Mul<Percentage> for $type {
-				type Output = f64;
+				type Output = f32;
 				fn mul(self, rhs: Percentage) -> Self::Output {
-					self as f64 * rhs.get()
+					self as f32 * rhs.0
 				}
 			}
 

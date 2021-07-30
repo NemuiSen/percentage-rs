@@ -1,6 +1,6 @@
 [package]
 name = "percentage-rs"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["nemui_sen <40149702+NemuiSen@users.noreply.github.com>"]
 edition = "2018"
 description = "Get the percentage of any number"
@@ -11,3 +11,4 @@ repository = "https://github.com/NemuiSen/percentage-rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+num-traits = "0.2.14"
