@@ -1,7 +1,7 @@
 [package]
 name = "percentage-rs"
 version = "0.1.5"
-authors = ["nemui_sen <40149702+NemuiSen@users.noreply.github.com>"]
+authors = ["NemuiSen <nekonya.sen@gmail.com>"]
 edition = "2018"
 description = "Get the percentage of any number"
 license = "MIT"
