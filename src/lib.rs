@@ -66,6 +66,7 @@ percent_impl!{
 /// assert!(p == 617.0 as f32); // the result is "617"
 /// ```
 #[derive(Default, Clone, Copy, PartialEq, Debug)]
+#[cfg_attr(feature = "serde_support", derive(serde::Serialize, serde::Deserialize))]
 pub struct Percentage(f32);
 
 impl Percentage {

@@ -1,6 +1,6 @@
 [package]
 name = "percentage-rs"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["NemuiSen <nekonya.sen@gmail.com>"]
 edition = "2018"
 description = "Get the percentage of any number"
@@ -10,5 +10,11 @@ repository = "https://github.com/NemuiSen/percentage-rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+
 [dependencies]
 num-traits = "0.2.14"
+serde = { version = "1.0", features = ["derive"], optional = true }
+
+[features]
+# Enables serde based serialization and deserialization
+serde_support = [ "serde" ]
